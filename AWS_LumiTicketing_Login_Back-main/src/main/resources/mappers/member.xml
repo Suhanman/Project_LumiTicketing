@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.care.boot.member.IMemberMapper">
+
+	<!-- 회원 정보 매핑 -->
+	<resultMap type="com.care.boot.member.MemberDTO" id="dbQuiz">
+		<id column="id" property="id"/>
+		<result column="pw" property="pw"/>
+		<result column="username" property="userName"/>
+		<result column="mobile" property="mobile"/>
+		<result column="membership" property="membership"/>
+	</resultMap>
+
+	<!-- 회원가입 -->
+	<insert id="registProc">
+        INSERT INTO RegularMember (id, pw, userName, mobile, membership)
+        VALUES (#{id}, #{pw}, #{userName}, #{mobile}, #{membership})
+    </insert>
+
+	<!-- 회원 정보 조회 -->
+	
+<select id="login" resultType="MemberDTO">
+    SELECT id, pw, username, mobile, membership, NULL AS vipNumber
+    FROM regularmember
+    WHERE id = #{id}
+    
+    UNION
+    
+    SELECT id, pw, username, mobile, membership, vip_number AS vipNumber
+    FROM vipmember
+    WHERE id = #{id}
+    
+    UNION
+    
+    SELECT id, pw, username, mobile, membership, NULL AS vipNumber
+    FROM admin
+    WHERE id = #{id}
+</select>
+
+	
+
+
+
+</mapper>
+
+
